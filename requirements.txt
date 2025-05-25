@@ -1,2 +1,12 @@
 reflex>=0.7.13a1
 openai
+openai
+langchain==0.3.13
+langchain-community==0.3.13
+langchain-core==0.3.28
+langchain-openai===0.2.14
+langgraph==0.2.60
+beautifulsoup4
+python-dotenv
+langchain-google-genai===2.0.7
+

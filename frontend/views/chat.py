@@ -22,19 +22,32 @@ def qa(question: str, answer: str) -> rx.Component:
                 ),
             ),
             rx.box(
-                rx.markdown(
-                    answer,
-                    class_name="[&>p]:!my-2.5 fade-in",
-                    unsafe_allow_html=True
-                ),
-                rx.box(
-                    rx.el.button(
-                        rx.icon(tag="copy", size=18),
-                        class_name="p-1 text-slate-10 hover:text-slate-11 transform transition-colors cursor-pointer",
-                        on_click=[rx.set_clipboard(answer), rx.toast("Copied!")],
-                        title="Copy",
+                rx.cond(
+                    answer.strip() == "",
+                    # Show 3 pulsating dots if answer is empty
+                    rx.box(
+                        rx.box(".", class_name="animate-bounce [animation-delay:-.32s] text-2xl"),
+                        rx.box(".", class_name="animate-bounce [animation-delay:-.16s] text-2xl"),
+                        rx.box(".", class_name="animate-bounce text-2xl"),
+                        class_name="flex flex-row gap-1 h-7 items-center px-2",
                     ),
-                    class_name="-bottom-9 left-5 absolute opacity-0 group-hover:opacity-100 transition-opacity",
+                    # Otherwise show the answer markdown and copy button
+                    rx.fragment(
+                        rx.markdown(
+                            answer,
+                            class_name="[&>p]:!my-2.5 fade-in",
+                            unsafe_allow_html=True
+                        ),
+                        rx.box(
+                            rx.el.button(
+                                rx.icon(tag="copy", size=18),
+                                class_name="p-1 text-slate-10 hover:text-slate-11 transform transition-colors cursor-pointer",
+                                on_click=[rx.set_clipboard(answer), rx.toast("Copied!")],
+                                title="Copy",
+                            ),
+                            class_name="-bottom-9 left-5 absolute opacity-0 group-hover:opacity-100 transition-opacity",
+                        ),
+                    ),
                 ),
                 class_name="relative bg-accent-4 px-5 rounded-3xl max-w-[70%] text-slate-12 self-start",
             ),
