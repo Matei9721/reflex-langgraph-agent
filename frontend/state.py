@@ -33,7 +33,7 @@ class State(rx.State):
     processing: bool = False
 
     # Keep track of the chat history as a list of (question, answer) tuples.
-    chat_history: list[tuple[str, str]] = []
+    chat_history: list[tuple[str, list[str], str]] = []
 
     agent_id: str = ""
 
@@ -52,7 +52,7 @@ class State(rx.State):
 
     async def answer(self):
 
-        self.chat_history.append((self.question, ""))
+        self.chat_history.append((self.question, ["web_search"], ""))
         yield
 
         # Set the processing state to True.
@@ -163,7 +163,8 @@ class State(rx.State):
 
                     self.chat_history[-1] = (
                         self.chat_history[-1][0],
-                        self.chat_history[-1][1] + update_info[0].content,
+                        self.chat_history[-1][1],
+                        self.chat_history[-1][2] + update_info[0].content,
                     )
                     yield
 

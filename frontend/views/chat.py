@@ -3,7 +3,7 @@ from frontend.components.badge import made_with_reflex
 from frontend.state import State
 
 
-def qa(question: str, answer: str) -> rx.Component:
+def qa(question: str, tools: list, answer: str) -> rx.Component:
     return rx.box(
         # Question
         rx.box(
@@ -12,6 +12,25 @@ def qa(question: str, answer: str) -> rx.Component:
                 class_name="[&>p]:!my-2.5",
             ),
             class_name="relative bg-slate-3 px-5 rounded-3xl max-w-[70%] text-slate-12 self-end",
+        ),
+        # Tools used
+        rx.box(
+            rx.foreach(
+                tools,
+                lambda tool: rx.box(
+                    rx.box(
+                        rx.icon(
+                            tag="wrench",
+                            size=22,
+                            stroke_width="1.5",
+                            class_name="!text-slate-10",
+                        ),
+                        rx.text(f"Running: {tool}", class_name="text-slate-12 text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-2 border border-slate-4 shadow-sm"),
+                        class_name="flex items-center gap-2"
+                    ),
+                    class_name="flex items-center gap-2 bg-white/80 hover:bg-slate-2 border border-slate-3 shadow px-3 py-1 rounded-full h-9 transition-colors m-1",
+                ),
+            ),
         ),
         # Answer
         rx.box(
@@ -36,7 +55,7 @@ def qa(question: str, answer: str) -> rx.Component:
                         rx.markdown(
                             answer,
                             class_name="[&>p]:!my-2.5 fade-in",
-                            unsafe_allow_html=True
+                            unsafe_allow_html=False
                         ),
                         rx.box(
                             rx.el.button(
@@ -62,7 +81,7 @@ def chat() -> rx.Component:
     return  rx.auto_scroll(
         rx.foreach(
             State.chat_history,
-            lambda messages: qa(messages[0], messages[1]),
+            lambda messages: qa(messages[0], messages[1], messages[2]),
         ),
     type="hover",
         # Make the scrollbar invisible
